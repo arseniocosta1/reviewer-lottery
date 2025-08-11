@@ -42,6 +42,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
     steps:
     - uses: actions/checkout@v1
     - uses: uesteibar/reviewer-lottery@v3
@@ -60,9 +63,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
     steps:
     - uses: actions/checkout@v1
-    - uses: omniplatypus/reviewer-lottery@v3.2.1
+    - uses: uesteibar/reviewer-lottery@v3
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         base-url: https://git.yourcompany.com/api/v3
@@ -97,3 +103,9 @@ Reviewing code is good and fun, but we want to be able to disconnect from time t
 
 By running this action on `pull_request_target` we enable this action to be performed on PRs opened by users with 
 readonly access to the repo, for example those by Dependabot.
+
+**Why do I need to specify permissions?**
+
+This action requires `pull-requests: write` permission to assign reviewers and `contents: read` to access the repository. 
+If you encounter the error "Resource not accessible by integration", 
+make sure to include the `permissions` block in your workflow as shown in the examples above.
